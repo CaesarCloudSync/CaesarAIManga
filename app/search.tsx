@@ -77,7 +77,7 @@ export default function Search(){
                 renderItem={({item,index}:any) => {
         
                         return (
-                            <MangaCover key={index} index={index} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} setRecentManga={setRecentManga}></MangaCover>
+                            <MangaCover key={index} index={index} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} type={item.type} setRecentManga={setRecentManga}></MangaCover>
             
                         )
                 }

@@ -1,9 +1,9 @@
 import { View,Text,Image,TouchableOpacity } from "react-native"
 import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-router";
-export default function VolumeCover({mangaid,cover_art,volumeid,volumeno,title}:any){
+export default function VolumeCover({mangaid,cover_art,volumeid,volumeno,title,cover_id,type}:any){
     const router = useRouter()
     const navtochapters = async () =>{
-        router.push({ pathname: "/chapterpage", params: { "volumeid":volumeid,"volumeno":volumeno,"mangaid": mangaid,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        router.push({ pathname: "/chapterpage", params: { "volumeid":volumeid,"volumeno":volumeno,"mangaid": mangaid,"title":title,"cover_id":cover_id,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
     }
     return(
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>

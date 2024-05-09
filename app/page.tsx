@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 import { View,Image,TouchableOpacity,Text } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Page(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const [hash,setHash] = useState("");
-    const [currentpage,setCurrentPage] = useState(0);
+    const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam}:any = params;
+    console.log(currentpageparam,"hey")
+    const [currentpage,setCurrentPage] = useState(currentpageparam === undefined ? 0 : parseInt(currentpageparam));
     const [pages,setPages] = useState([]);
-    const { chapterid}:any = params;
+    
+    console.log("hi",chapterid,mangaid,cover_id,title,cover_art)
+    const setcurrentreading =async () => {
+        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}))
+        router.push("/library")
+    }
     const getpages =async () => {
         const response = await axios.get(`https://api.mangadex.org/at-home/server/${chapterid}`)
         let result = response.data
@@ -41,6 +49,7 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
+    // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
     <View style={{flex:1,backgroundColor:"#141212",alignItems:"center"}}>
@@ -66,7 +75,9 @@ export default function Page(){
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.25))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.25)}</Text>
             </TouchableOpacity>
+            <TouchableOpacity onLongPress={()=>{setcurrentreading()}}>
             <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAILogo.png")}></Image>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.75))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.75)}</Text>
             </TouchableOpacity>
