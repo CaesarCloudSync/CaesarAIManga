@@ -26,7 +26,7 @@ export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,t
     const checkvolumeunavailable =async () => {
         const unavail = await AsyncStorage.getItem(`un-manga-volume:${mangaid}-${volumeno}`)
         if (unavail !== null){
-            setVolumeColor("red")
+            setVolumeColor("#3c3636")
         }
         //console.log(unavail)
         

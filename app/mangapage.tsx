@@ -40,7 +40,7 @@ export default function MangaPage(){
     useEffect(()=>{
         getmangapage()
     },[])
-    console.log(cover_art)
+    //console.log(cover_art)
     //console.log("hi",`https://uploads.mangadex.org/covers/${mangaid}/${volumefeed[0].attributes.fileName}`)
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
