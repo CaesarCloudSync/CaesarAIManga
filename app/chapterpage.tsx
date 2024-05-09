@@ -8,7 +8,7 @@ import { StatusBar } from "expo-status-bar";
 export default function ChapterPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
-    const { mangaid,volumeid,title,cover_art,volumeno,cover_id,type}:any = params;
+    const { mangaid,title,cover_art,volumeno,cover_id,type}:any = params;
     const [chapterfeed,setChapterFeed] = useState("");
     const getchapterpages =async () => {
         console.log(mangaid)
@@ -59,7 +59,7 @@ export default function ChapterPage(){
                     renderItem={({item,index}:any) => {
                             return (
                                 
-                                <ChapterCover key={index} chapterid={item.id} title={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} ></ChapterCover>
+                                <ChapterCover key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} ></ChapterCover>
                 
                             )
                     }

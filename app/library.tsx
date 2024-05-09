@@ -3,6 +3,7 @@ import NavigationFooter from "./footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import MangaCover from "@/components/homecomponents/MangaCover";
+import VolumeCover from "@/components/mangapagecomponents/volumecover";
 import { FlatList } from "react-native";
 export default function Library(){
     const [recentmanga,setRecentManga]= useState([]);
@@ -20,25 +21,28 @@ export default function Library(){
     },[])
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
-        {recentmanga.length !== 0 &&
-                <FlatList
-                numColumns={2}
-                style={{flex:1, flexGrow: 1}}
-                
-                columnWrapperStyle={{    flexGrow: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',}}
-                data={recentmanga}
-                renderItem={({item,index}:any) => {
-        
-                        return (
-                            <MangaCover key={index} index={index} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} type={item.type} chapterid={item.chapterid} currentpage={item.currentpage}></MangaCover>
-            
-                        )
-                }
-            }
+            {recentmanga.length !== 0 &&
+            <FlatList
+                    numColumns={2}
+                    
+                    
+                    
+                    columnWrapperStyle={{    flexGrow: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',}}
 
-        />}
+                    data={recentmanga}
+                    renderItem={({item,index}:any) => {
+        
+                            return (
+                                
+                                <VolumeCover key={index}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={item.color_art}></VolumeCover>
+                
+                            )
+                    }
+                }
+
+            />}
             <NavigationFooter style={{flex:0.1}} currentpage={"library"}/>
             
         </View>

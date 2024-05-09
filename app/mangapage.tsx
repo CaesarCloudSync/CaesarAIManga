@@ -84,7 +84,7 @@ export default function MangaPage(){
         
                             return (
                                 
-                                <VolumeCover key={index} volumeid={item.id} volumeno={item.attributes.volume} mangaid={mangaid} title={title} cover_id={cover_id} type={type} cover_art={item.attributes.fileName}></VolumeCover>
+                                <VolumeCover key={index}  volumeno={item.attributes.volume} mangaid={mangaid} title={title} cover_id={cover_id} type={type} cover_art={item.attributes.fileName}></VolumeCover>
                 
                             )
                     }

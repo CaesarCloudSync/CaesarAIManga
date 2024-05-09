@@ -9,14 +9,14 @@ export default function Page(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const [hash,setHash] = useState("");
-    const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam}:any = params;
+    const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam,chaptertitle,volumeno}:any = params;
     console.log(currentpageparam,"hey")
     const [currentpage,setCurrentPage] = useState(currentpageparam === undefined ? 0 : parseInt(currentpageparam));
     const [pages,setPages] = useState([]);
     
-    console.log("hi",chapterid,mangaid,cover_id,title,cover_art)
+    console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
-        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}))
+        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}))
         router.push("/library")
     }
     const getpages =async () => {
