@@ -14,9 +14,9 @@ export default function Page(){
     const [currentpage,setCurrentPage] = useState(currentpageparam === undefined ? 0 : parseInt(currentpageparam));
     const [pages,setPages] = useState([]);
     
-    console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
+    //console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
-        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}))
+        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`}))
         router.push("/library")
     }
     const getpages =async () => {

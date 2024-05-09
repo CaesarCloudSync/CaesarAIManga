@@ -1,4 +1,4 @@
-import { TextInput, View ,FlatList,Text,TouchableOpacity} from "react-native";
+import { TextInput, View ,FlatList,Text,TouchableOpacity,Image} from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MangaCover from "@/components/homecomponents/MangaCover";
@@ -46,24 +46,33 @@ export default function Search(){
                 <AntDesign name="arrowright" size={24} color="white" />
                 </TouchableOpacity>}
 
-
+                <View style={{ flex:0.1,flexDirection:"row",justifyContent:"center",alignItems:"center"}}>
+                <View style={{height:30,borderTopLeftRadius:5,borderBottomLeftRadius:5,backgroundColor:"white",justifyContent:"center",padding:3}}>
+                    <AntDesign name="search1" size={20} color="black" />
+                </View>
+                
                 <TextInput
                 onSubmitEditing={() =>{searchmanga()}}
                 placeholder="What manga would you like to read?"
-                placeholderTextColor={'white'}
-         
+                placeholderTextColor={'black'}
+                
                 style={ {
-                    height: 10,
-                    flex:0.1,
-
-                    borderBottomRightRadius:10,borderTopRightRadius:10,
+                    height: 30,
+                    width:"70%",
+                   
+                    
+                    borderBottomRightRadius:5,borderTopRightRadius:5,
    
-                    backgroundColor:"#141212",
-                    color:"white"
+                    backgroundColor:"white",
+                    color:"black"
                   }}
                 onChangeText={setText}
                 value={text}
             />
+            <View style={{flex:0.13,marginLeft:15}}>
+                <Image style={{width:44,height:39}} source={require('./CaesarAILogo.png')} />
+                </View>
+            </View>
             
         {recentmanga.length !== 0 &&
                 <FlatList
@@ -106,6 +115,7 @@ export default function Search(){
             }
 
         />}
+        {recentmanga.length === 0 && searchresults.length === 0 && <View style={{flex:1}}></View>}
         {/*searchresults.length === 0 && <View style={{flex:1}}></View>*/}
         <NavigationFooter style={{flex:0.1}} currentpage={"search"}/>
         </View>

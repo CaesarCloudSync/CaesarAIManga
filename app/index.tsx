@@ -8,6 +8,7 @@ import { mangatest } from '@/components/homecomponents/test';
 import Header from '@/components/header/header';
 import NavigationFooter from './footer';
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Index() {
   
     const [mangafeed,setMangaFeed] = useState([]);
@@ -24,7 +25,8 @@ export default function Index() {
         const shoujofeed = await getmangafeed({"publicationDemographic":["shoujo"],"contentRating":["safe"],"createdAtSince":"2022-05-07T14:30:45"})
         const seinenfeed = await getmangafeed({"publicationDemographic":["seinen"],"contentRating":["safe"],"createdAtSince":"2022-05-07T14:30:45"})
         const mangafeed = shounenfeed.concat(shoujofeed).concat(seinenfeed)
-
+        //let keys = await AsyncStorage.getAllKeys()
+        //const items:any = await AsyncStorage.multiRemove(keys.filter((key:any) =>{return(key.includes("manga-current-reading:"))}))
         setMangaFeed(mangafeed)
     }
     

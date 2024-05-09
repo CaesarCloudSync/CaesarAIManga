@@ -14,7 +14,7 @@ export default function MangaPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const { mangaid,cover_id,title,type,cover_art}:any = params;
-    console.log("hem",type)
+    //console.log("hem",type)
     //console.log(mangaid,title,cover_art)
     const getmangapage = async () => {
         const response = await axios.get(`https://api.mangadex.org/manga/${mangaid}`)

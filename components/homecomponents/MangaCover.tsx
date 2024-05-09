@@ -6,15 +6,14 @@ import { Image,Text } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { useNavigation, useRouter, useLocalSearchParams ,usePathname} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export default function MangaCover({mangaid,cover_id,title,type,index,setRecentManga,currentpage,chapterid}:any){
+export default function MangaCover({mangaid,cover_id,title,type,index,setRecentManga}:any){
     const router = useRouter();
     const pathname = usePathname();
-    console.log(type)
     const [cover_art,setCoverArt] = useState("");
     
     const [coverimageexists,setCoverImageExists] = useState(true)
     const removefromrecent =async () => {
-        console.log(pathname)
+        //console.log(pathname)
         if (pathname === "/search"){
             await AsyncStorage.removeItem(`manga:${mangaid}`)
             setRecentManga([])
@@ -49,14 +48,11 @@ export default function MangaCover({mangaid,cover_id,title,type,index,setRecentM
     }
     const navmangapage =async () => {
         AsyncStorage.setItem(`manga:${mangaid}`,JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}))
-        if(currentpage === undefined){
 
      
         router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
-        }
-        else{
-            router.push({ pathname: "/page", params: {"chapterid":chapterid,"mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":cover_art,"currentpageparam":currentpage}});
-        }
+    
+
         
         
     }

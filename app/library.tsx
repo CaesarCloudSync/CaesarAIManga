@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import MangaCover from "@/components/homecomponents/MangaCover";
 import VolumeCover from "@/components/mangapagecomponents/volumecover";
 import { FlatList } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import Header from "@/components/header/header";
 export default function Library(){
     const [recentmanga,setRecentManga]= useState([]);
     const getcurrentreading =async () => {
@@ -12,18 +14,23 @@ export default function Library(){
         const items:any = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes("manga-current-reading:"))}))
          //console.log(items)
          const mangaitems = items.map((item:any) =>{return(JSON.parse(item[1]))})
-        console.log(mangaitems)
+
          setRecentManga(mangaitems)
         
      }
     useEffect(()=>{
+        if (recentmanga.length === 0){
         getcurrentreading()
-    },[])
+    }
+    },[recentmanga])
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
+            <Header/>
+            <StatusBar  hidden/>
             {recentmanga.length !== 0 &&
             <FlatList
                     numColumns={2}
+                    style={{flex:1}}
                     
                     
                     
@@ -33,16 +40,18 @@ export default function Library(){
 
                     data={recentmanga}
                     renderItem={({item,index}:any) => {
+                        let cover_filename = item.cover_art.split("/").slice(-1)
         
                             return (
                                 
-                                <VolumeCover key={index}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={item.color_art}></VolumeCover>
+                                <VolumeCover key={index} currentpage={item.currentpage} chapterid={item.chapterid} volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={cover_filename} setRecentManga={setRecentManga} ></VolumeCover>
                 
                             )
                     }
                 }
 
             />}
+            {recentmanga.length === 0 && <View style={{flex:1}}></View>}
             <NavigationFooter style={{flex:0.1}} currentpage={"library"}/>
             
         </View>
