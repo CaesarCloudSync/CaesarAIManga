@@ -1,25 +1,44 @@
 import { View,Text,Image } from 'react-native';
 
 import { Link } from 'expo-router';
-
-export default function NavigationFooter({currentpage}:any){
+import { FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+export default function NavigationFooter({currentpage,style}:any){
+    const router = useRouter();
+    const navnextpage =async (route:string) => {
+        if (route === "home"){
+            router.push("/")
+        }
+        else if (route === "search"){
+            router.push("/search")
+        }
+        else if (route === "downloads"){
+            router.push("/downloads")
+        }
+        else if (route === "library"){
+            router.push("/library")
+        }
+    }
 
     return(
-        <View style={{flex:0.03,backgroundColor:"#141212"}}>
+        <View style={[{flex:0.04,backgroundColor:"#141212"},style]}>
         <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",flex:1}}>
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
-            <Link  href="/">
-                <View>
+            
+                <TouchableOpacity onPress={() =>{navnextpage("home")}}>
                     
-                    <Image  ></Image>
+                <FontAwesome name="home" size={24} color={currentpage=== "home" ? "white" :"grey"}/>
                 
                         <Text style={{fontSize:10,color:currentpage=== "home" ? "white" :"grey"}}>
                             Home
                         </Text>
                     
 
-                </View>
-            </Link>
+                </TouchableOpacity>
+            
         </View>
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
             <View>
@@ -27,55 +46,55 @@ export default function NavigationFooter({currentpage}:any){
                 {currentpage === "search" ?
                 <View>
                                     
-                    <Image  ></Image>
+                <Image source={require('./search-filled.png')} style={{width: 25, height: 25}} />
                     
         
                     <Text style={{fontSize:10,color:currentpage=== "search" ? "white" :"grey"}}>
                         Search
                     </Text>
                 </View>:
-                 <Link   href="/search" style={{backgroundColor:"transparent"}}>
-                    <View>
+                 
+                    <TouchableOpacity onPress={() =>{navnextpage("search")}}>
                 
-                    <Image  ></Image>
+                    <AntDesign name="search1" size={24} color={currentpage=== "search" ? "white" :"grey"} />
                     
         
                     
                     <Text style={{fontSize:10,color:currentpage=== "search" ? "white" :"grey"}}>
                             Search
                         </Text>
-                    </View>
-                </Link>
+                    </TouchableOpacity>
+            
                 }
 
 
             </View>
         </View>
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
-            <Link    href="/downloads">
-                <View>
-                <Image  ></Image>
+  
+                <TouchableOpacity onPress={() =>{navnextpage("downloads")}}>
+                    <FontAwesome  style={{marginLeft:13}}  name="download" size={24} color={currentpage=== "downloads" ? "white" :"grey"} />
                     
                         <Text style={{fontSize:10,color:currentpage=== "downloads" ? "white" :"grey"}}>
                             Downloads
                         </Text>
                 
 
-                </View>
-            </Link>
+                </TouchableOpacity>
+          
         </View>
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
-            <Link   href="/library">
-                <View>
-                {/*Image style={{width:20,height:20}} source={} ></Image> */}
+           
+                <TouchableOpacity onPress={() =>{navnextpage("library")}}>
+                <MaterialIcons name="my-library-music" size={24} color={currentpage=== "library" ? "white" :"grey"} />
                     
                         <Text style={{fontSize:10,color:currentpage=== "library" ? "white" :"grey"}}>
                             Library
                         </Text>
                 
 
-                </View>
-            </Link>
+                </TouchableOpacity>
+           
         </View>
 
 

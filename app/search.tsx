@@ -1,13 +1,16 @@
-import { TextInput, View ,FlatList} from "react-native";
+import { TextInput, View ,FlatList,Text,TouchableOpacity} from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MangaCover from "@/components/homecomponents/MangaCover";
 import NavigationFooter from "./footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
+import { AntDesign } from '@expo/vector-icons';
 export default function Search(){
     const [text,setText] = useState("");
-    const [searchresults,setSearchResults] = useState("");
+    const [searchresults,setSearchResults] = useState([]);
     const [recentmanga,setRecentManga]  = useState<any>([]);
+    const [recentremoved,setRecentRemoved] = useState(false)
      const searchmanga =async () => {
         if(text !== ""){
             const response = await axios.get(`https://api.mangadex.org/manga?limit=100&originalLanguage[]=ja&availableTranslatedLanguage[]=en`,{params:{"title": text}})
@@ -22,25 +25,37 @@ export default function Search(){
      }
      const getrecentmanga =async () => {
         let keys = await AsyncStorage.getAllKeys()
-        const items = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes("manga:"))}))
-        setRecentManga(items)
+        const items:any = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes("manga:"))}))
+         //console.log(items)
+         const mangaitems = items.map((item:any) =>{return(JSON.parse(item[1]))})
+        setRecentManga(mangaitems)
         
      }
+
+
      useEffect(() =>{
-        getrecentmanga()
-     },[])
+        if (recentmanga.length === 0){
+            getrecentmanga()
+        }
+     },[recentmanga])
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
-            
+                <StatusBar  hidden/>
+                {searchresults.length !== 0 &&
+                <TouchableOpacity onPress={() =>{setSearchResults([])}} style={{alignSelf:"flex-end"}}>
+                <AntDesign name="arrowright" size={24} color="white" />
+                </TouchableOpacity>}
+
+
                 <TextInput
                 onSubmitEditing={() =>{searchmanga()}}
-                placeholder="What song would you like to listen to?"
+                placeholder="What manga would you like to read?"
                 placeholderTextColor={'white'}
          
                 style={ {
                     height: 10,
                     flex:0.1,
-                    margin:20,
+
                     borderBottomRightRadius:10,borderTopRightRadius:10,
    
                     backgroundColor:"#141212",
@@ -49,29 +64,27 @@ export default function Search(){
                 onChangeText={setText}
                 value={text}
             />
+            
         {recentmanga.length !== 0 &&
                 <FlatList
                 numColumns={2}
-                style={{flex:1}}
+                style={{flex:1, flexGrow: searchresults.length === 0 ?1 :0 }}
                 
                 columnWrapperStyle={{    flexGrow: 1,
                     justifyContent: 'center',
                     alignItems: 'center',}}
-
                 data={recentmanga}
                 renderItem={({item,index}:any) => {
-                    let manga = JSON.parse(item[1])
-                    console.log(manga)
         
                         return (
-                            <MangaCover key={index} index={index} mangaid={manga.mangaid} title={manga.title} cover_id={manga.cover_id}></MangaCover>
+                            <MangaCover key={index} index={index} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} setRecentManga={setRecentManga}></MangaCover>
             
                         )
                 }
             }
 
         />}
-
+    
 
         {searchresults.length !== 0 &&
                 <FlatList
@@ -94,7 +107,7 @@ export default function Search(){
 
         />}
         {/*searchresults.length === 0 && <View style={{flex:1}}></View>*/}
-        <NavigationFooter currentpage={"search"}/>
+        <NavigationFooter style={{flex:0.1}} currentpage={"search"}/>
         </View>
     )
 }

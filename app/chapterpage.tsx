@@ -3,6 +3,8 @@ import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-rou
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ChapterCover from "@/components/chapterpagecomponents/chaptercover";
+import { AntDesign } from '@expo/vector-icons';
+import { StatusBar } from "expo-status-bar";
 export default function ChapterPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
@@ -30,8 +32,9 @@ export default function ChapterPage(){
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
             <View style={{flex:0.04}}>
+            <StatusBar  hidden/>
             <TouchableOpacity style={{flex:1}} onPress={() =>{navigation.goBack()}}>
-            <Text style={{color:"white"}}>Back</Text>
+            <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
             </View>
 

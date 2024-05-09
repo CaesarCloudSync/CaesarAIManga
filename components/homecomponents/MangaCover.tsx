@@ -4,25 +4,44 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Image,Text } from "react-native";
 import { TouchableOpacity } from "react-native";
-import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
+import { useNavigation, useRouter, useLocalSearchParams ,usePathname} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export default function MangaCover({mangaid,cover_id,title,type,index}:any){
+export default function MangaCover({mangaid,cover_id,title,type,index,setRecentManga}:any){
     const router = useRouter();
+    const pathname = usePathname();
     //console.log(description.en)
     const [cover_art,setCoverArt] = useState("");
     
     const [coverimageexists,setCoverImageExists] = useState(true)
+    const removefromrecent =async () => {
+        console.log(pathname)
+        if (pathname === "/search"){
+            await AsyncStorage.removeItem(`manga:${mangaid}`)
+            setRecentManga([])
+
+        }
+        
+        //
+        
+    }
     
     const getcoverimage =async () => {
         try{
             //console.log(`https://api.mangadex.org/cover/${cover_id}`)
             const response = await axios.get(`https://api.mangadex.org/cover/${cover_id}`)
             let cover_art = response.data.data.attributes.fileName
-            //console.log(`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`)
+            //console.log("ho",`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`)
             setCoverArt(cover_art)
         }
         catch{
             //console.log("error",`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`)
+            const responsevolumecover = await axios.get(`https://api.mangadex.org/cover`,{params:{"manga":[mangaid],"limit":1,"order":{
+            
+            "volume":"asc"
+            
+          }}})
+            let resultvolumecover = responsevolumecover.data.data
+            setCoverArt(resultvolumecover[0].attributes.fileName)
             setCoverImageExists(false)
         }
 
@@ -49,13 +68,13 @@ export default function MangaCover({mangaid,cover_id,title,type,index}:any){
              
             {cover_art !== ""?
 
-            <TouchableOpacity onPress={() =>{navmangapage()}} >
-                <Image style={{width:200,height:300}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}}></Image>
+            <TouchableOpacity onLongPress={() =>{removefromrecent()}} onPress={() =>{navmangapage()}} >
+                <Image style={{width:170,height:250}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}}></Image>
             </TouchableOpacity>
 
             :
-            <TouchableOpacity onPress={() =>{navmangapage()}} >
-                <Image style={{width:200,height:300}} alt="hello" source={require("./download (1).jpeg")}></Image>
+            <TouchableOpacity onLongPress={() =>{removefromrecent()}} onPress={() =>{navmangapage()}} >
+                <Image style={{width:170,height:250}} alt="hello" source={require("./download (1).jpeg")}></Image>
             </TouchableOpacity>
    
             
@@ -63,7 +82,7 @@ export default function MangaCover({mangaid,cover_id,title,type,index}:any){
            
             }
             
-            <Text style={{color:"white",width:200}}>{title}</Text>
+            <Text style={{color:"white",width:170}}>{title}</Text>
             </View>
 
             

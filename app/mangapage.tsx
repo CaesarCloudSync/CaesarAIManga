@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FlatList } from "react-native";
 import VolumeCover from "@/components/mangapagecomponents/volumecover";
+import { StatusBar } from "expo-status-bar";
 export default function MangaPage(){
     const [description,setDescription] = useState("");
-    const [volumefeed,setVolumeFeed] = useState([]);
+    const [volumefeed,setVolumeFeed] = useState<any>([]);
     const router = useRouter()
     const navigation = useNavigation();
     const params = useLocalSearchParams();
@@ -38,21 +39,31 @@ export default function MangaPage(){
     useEffect(()=>{
         getmangapage()
     },[])
+    console.log(cover_art)
+    //console.log("hi",`https://uploads.mangadex.org/covers/${mangaid}/${volumefeed[0].attributes.fileName}`)
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
+            <StatusBar  hidden/>
             <View style={{height:20}}>
             <TouchableOpacity style={{flex:1}} onPress={() =>{navigation.goBack()}}>
-            <Text style={{color:"white"}}>Back</Text>
+            <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
             </View>
-
+            {cover_art.includes(".jpg") ?
             <View style={{flex:0,alignItems:"center"}}>
              
                 <Image style={{width:150,height:225}} alt="hello" source={{uri:cover_art}}></Image>
                 <Text style={{color:"white",fontSize:20}}>{title}</Text>
 
             </View>
-            <ScrollView style={{height:300,alignSelf:"center"}}>
+                :
+                volumefeed.length !== 0 &&
+                <View style={{flex:0,alignItems:"center"}}>
+                    <Image style={{width:150,height:225}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${volumefeed[0].attributes.fileName}`}}></Image>
+                    <Text style={{color:"white",fontSize:20}}>{title}</Text>
+                </View>
+                }
+           <ScrollView style={{height:300,alignSelf:"center"}}>
                 <Text style={{color:"white",width:350}}>{description}</Text>
                 
 
@@ -60,6 +71,7 @@ export default function MangaPage(){
             {volumefeed.length !== 0 &&
             <FlatList
                     numColumns={2}
+                    
                     
                     
                     columnWrapperStyle={{    flexGrow: 1,

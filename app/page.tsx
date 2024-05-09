@@ -2,6 +2,8 @@ import axios from "axios";
 import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View,Image,TouchableOpacity,Text } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
+import { StatusBar } from "expo-status-bar";
 export default function Page(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
@@ -39,12 +41,13 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
-    console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
+    //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
     <View style={{flex:1,backgroundColor:"#141212",alignItems:"center"}}>
+        <StatusBar  hidden/>
         <View style={{alignSelf:"flex-start"}} >
             <TouchableOpacity style={{width:100}}  onPress={() =>{navigation.goBack()}}>
-            <Text style={{color:"white"}}>Back</Text>
+            <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
         </View>
         <View style={{flex:0.1}}>
@@ -58,18 +61,18 @@ export default function Page(){
         <Image style={{width:414,height:586}} alt="hello" source={{uri:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
         <View style={{flex:0.5,flexDirection:"row",gap:25,marginTop:20}}>
             <TouchableOpacity  onPress={() =>{decrementpage()}}>
-            <Text style={{color:"white",fontSize:20}}>Back</Text>
+            <AntDesign name="arrowleft" size={35} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.25))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.25)}</Text>
             </TouchableOpacity>
-            <View style={{width:20}}></View>
+            <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAILogo.png")}></Image>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.75))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.75)}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity  onPress={() =>{incrementpage()}}>
-            <Text style={{color:"white",fontSize:20}}>Forward</Text>
+            <TouchableOpacity style={{bottom:3}} onPress={() =>{incrementpage()}}>
+            <AntDesign name="arrowright" size={35} color="white" />
             </TouchableOpacity>
         </View>
 

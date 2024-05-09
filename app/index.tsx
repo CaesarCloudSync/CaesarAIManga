@@ -7,6 +7,7 @@ import MangaCover from '@/components/homecomponents/MangaCover';
 import { mangatest } from '@/components/homecomponents/test';
 import Header from '@/components/header/header';
 import NavigationFooter from './footer';
+import { StatusBar } from 'expo-status-bar';
 export default function Index() {
   
     const [mangafeed,setMangaFeed] = useState([]);
@@ -34,6 +35,7 @@ useEffect(() =>{
 },[])
   return (
     <View style={{flex:1,backgroundColor:"#141212"}}>
+        <StatusBar  hidden/>
         <Header style={{flex:1}}/>
         <View style={{flex:1,padding:30}}>
 
