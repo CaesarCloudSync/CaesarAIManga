@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ChapterCover from "@/components/chapterpagecomponents/chaptercover";
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ChapterPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
@@ -19,9 +20,12 @@ export default function ChapterPage(){
             
           }}})
         let result = responsefeed.data.data
-        //console.log(result)
+        console.log(result[1])
         result= result.filter((manga:any)=>{return(manga.attributes.volume === volumeno)})
-        console.log(result)
+        //console.log(result)
+        if (result.length === 0){
+            AsyncStorage.setItem(`un-manga-volume:${mangaid}-${volumeno}`,JSON.stringify({"mangaid":mangaid,"volumeno":volumeno}))
+        }
         setChapterFeed(result)
         
     }
@@ -59,7 +63,7 @@ export default function ChapterPage(){
                     renderItem={({item,index}:any) => {
                             return (
                                 
-                                <ChapterCover key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} ></ChapterCover>
+                                <ChapterCover  key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} ></ChapterCover>
                 
                             )
                     }
