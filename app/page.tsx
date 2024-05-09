@@ -16,7 +16,7 @@ export default function Page(){
     
     //console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
-        AsyncStorage.setItem(`manga-current-reading:${mangaid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`}))
+        AsyncStorage.setItem(`manga-current-reading:${mangaid}-${volumeno}-${chapterid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`}))
         router.push("/library")
     }
     const getpages =async () => {
@@ -44,6 +44,12 @@ export default function Page(){
     }
     const snapTo = (number:number) =>{
         setCurrentPage(number)
+
+    }
+    const navvolume =async () => {
+             
+        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+    
 
     }
     useEffect(() =>{
@@ -75,7 +81,7 @@ export default function Page(){
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.25))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.25)}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onLongPress={()=>{setcurrentreading()}}>
+            <TouchableOpacity onPress={() =>{navvolume()}} onLongPress={()=>{setcurrentreading()}}>
             <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAILogo.png")}></Image>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.75))}}>

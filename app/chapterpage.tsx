@@ -12,7 +12,7 @@ export default function ChapterPage(){
     const { mangaid,title,cover_art,volumeno,cover_id,type}:any = params;
     const [chapterfeed,setChapterFeed] = useState("");
     const getchapterpages =async () => {
-        console.log(mangaid)
+        //console.log(mangaid)
         const responsefeed = await axios.get(`https://api.mangadex.org/manga/${mangaid}/feed`,{params:{"limit":500,"translatedLanguage":["en"],"order":{
             
             "volume":"asc",
@@ -20,7 +20,7 @@ export default function ChapterPage(){
             
           }}})
         let result = responsefeed.data.data
-        console.log(result[1])
+        //console.log(result[1])
         result= result.filter((manga:any)=>{return(manga.attributes.volume === volumeno)})
         //console.log(result)
         if (result.length === 0){
