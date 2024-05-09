@@ -41,10 +41,10 @@ export default function Library(){
                     data={recentmanga}
                     renderItem={({item,index}:any) => {
                         let cover_filename = item.cover_art.split("/").slice(-1)
-        
+                            
                             return (
                                 
-                                <VolumeCover key={index} currentpage={item.currentpage} chapterid={item.chapterid} volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={cover_filename} setRecentManga={setRecentManga} ></VolumeCover>
+                                <VolumeCover key={index} chaptertitle={item.chaptertitle} currentpage={item.currentpage} chapterid={item.chapterid} volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={cover_filename} setRecentManga={setRecentManga} ></VolumeCover>
                 
                             )
                     }

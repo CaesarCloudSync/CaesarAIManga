@@ -73,8 +73,10 @@ export default function Search(){
                 <Image style={{width:44,height:39}} source={require('./CaesarAILogo.png')} />
                 </View>
             </View>
-            
-        {recentmanga.length !== 0 &&
+        
+          
+        {recentmanga.length !== 0 && searchresults.length === 0&&
+        <View style={{flex:1,padding:30}}> 
                 <FlatList
                 numColumns={2}
                 style={{flex:1, flexGrow: searchresults.length === 0 ?1 :0 }}
@@ -92,10 +94,12 @@ export default function Search(){
                 }
             }
 
-        />}
+        /></View>}
+       
     
 
         {searchresults.length !== 0 &&
+        <View style={{flex:1,padding:30}}> 
                 <FlatList
                 numColumns={2}
                 style={{flex:1}}
@@ -114,7 +118,8 @@ export default function Search(){
                 }
             }
 
-        />}
+        />
+        </View>}
         {recentmanga.length === 0 && searchresults.length === 0 && <View style={{flex:1}}></View>}
         {/*searchresults.length === 0 && <View style={{flex:1}}></View>*/}
         <NavigationFooter style={{flex:0.1}} currentpage={"search"}/>

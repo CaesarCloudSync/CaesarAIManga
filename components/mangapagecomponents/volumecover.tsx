@@ -3,16 +3,16 @@ import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-rou
 import { usePathname } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,type,chapterid,currentpage,setRecentManga}:any){
+export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,type,chapterid,currentpage,setRecentManga,chaptertitle}:any){
     const router = useRouter();
     const pathname = usePathname();
     const [volumecolor,setVolumeColor] = useState("#141212")
     const navtochapters = async () =>{
         if (currentpage !== undefined){
-        router.push({ pathname: "/page", params: {"chapterid":chapterid,"mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":cover_art,"currentpageparam":currentpage}});
+        router.push({ pathname: "/page", params: {"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":cover_art,"currentpageparam":currentpage}});
         }
         else{
-        router.push({ pathname: "/chapterpage", params: { "volumeno":volumeno,"mangaid": mangaid,"title":title,"cover_id":cover_id,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        router.push({ pathname: "/chapterpage", params: { "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
         }
     }
     const removefromrecentreading =async () => {

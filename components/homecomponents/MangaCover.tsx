@@ -63,10 +63,11 @@ export default function MangaCover({mangaid,cover_id,title,type,index,setRecentM
     return(
         <View style={{flex:1}}>
             <View style={{flex:1}}>
-            {index === 0 &&    <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Manga</Text>}
-            {index === 20 &&    <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Shounen</Text>}
-            {index === 100 &&    <Text style={{color:"white",fontSize:20,marginBottom:10}}>Latest Shoujo</Text>}
-            {index === 200 &&    <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Seinen</Text>}
+            {index === 0 && pathname === "/search" &&  <Text style={{color:"white",fontSize:17,marginBottom:10}}>Recent Manga</Text>}
+            {index === 0 && pathname !== "/search" &&  <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Manga</Text>}
+            {index === 20 && pathname !== "/search" &&   <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Shounen</Text>}
+            {index === 100 &&  pathname !== "/search" &&  <Text style={{color:"white",fontSize:20,marginBottom:10}}>Latest Shoujo</Text>}
+            {index === 200 &&  pathname !== "/search" &&  <Text style={{color:"white",fontSize:17,marginBottom:10}}>Latest Seinen</Text>}
             {index.toString().includes("1") &&   <View style={{height:32}}></View>}
              
             {cover_art !== ""?

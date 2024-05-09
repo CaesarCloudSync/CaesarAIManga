@@ -10,7 +10,7 @@ export default function ChapterCover({mangaid,cover_art,chapter,title,chapterid,
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
             <TouchableOpacity onPress={() =>{navtochapters()}}>
                 <Image style={{width:175,height:250}} alt="hello" source={{uri:cover_art}}></Image>
-                <Text style={{color:"white",width:175}}>Chapter - {chapter} | {title}</Text>
+                <Text style={{color:"white",width:175}}>Chapter - {chaptertitle}-  {chapter} </Text>
             </TouchableOpacity>
         </View>
 

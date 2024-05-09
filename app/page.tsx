@@ -5,12 +5,25 @@ import { View,Image,TouchableOpacity,Text } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Gesture,GestureDetector,Swipeable,Directions,GestureHandlerRootView } from "react-native-gesture-handler";
 export default function Page(){
+    const flingleft = Gesture.Fling()
+    .direction(Directions.LEFT )
+    .onEnd((event) => {
+        incrementpage()
+    })
+    const flingright = Gesture.Fling()
+    .direction(Directions.RIGHT )
+    .onEnd((event) => {
+      
+      decrementpage()
+    })
+
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const [hash,setHash] = useState("");
     const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam,chaptertitle,volumeno}:any = params;
-    console.log(currentpageparam,"hey")
+    //console.log(currentpageparam,"hey")
     const [currentpage,setCurrentPage] = useState(currentpageparam === undefined ? 0 : parseInt(currentpageparam));
     const [pages,setPages] = useState([]);
     
@@ -55,6 +68,7 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
+    //console.log(volumeno,"hi")
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
@@ -69,11 +83,15 @@ export default function Page(){
             <Text style={{color:"white"}}>Page: {currentpage + 1}/{pages.length}</Text>
         </View>
         <View style={{flex:0.2}}>
-            <Text style={{color:"white"}}></Text>
+            <Text style={{color:"white"}}>{title} - Volume: {volumeno} | Chapter: {chaptertitle}</Text>
         </View>
 
+        <GestureHandlerRootView style={{flex:2}}>
+        <GestureDetector gesture={Gesture.Exclusive(flingleft,flingright)}>
             
         <Image style={{width:414,height:586}} alt="hello" source={{uri:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
+        </GestureDetector>
+        </GestureHandlerRootView>
         <View style={{flex:0.5,flexDirection:"row",gap:25,marginTop:20}}>
             <TouchableOpacity  onPress={() =>{decrementpage()}}>
             <AntDesign name="arrowleft" size={35} color="white" />
@@ -92,6 +110,8 @@ export default function Page(){
             <AntDesign name="arrowright" size={35} color="white" />
             </TouchableOpacity>
         </View>
+
+
 
     </View>)
 }
