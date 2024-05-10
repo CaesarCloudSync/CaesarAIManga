@@ -38,8 +38,11 @@ export default function Page(){
         let hash = result.chapter.hash
         setHash(hash)
         setPages(result.chapter.data)
-        //let pageurl = `https://uploads.mangadex.org/data/3303dd03ac8d27452cce3f2a882e94b2/1-f7a76de10d346de7ba01786762ebbedc666b412ad0d4b73baa330a2a392dbcdd.png`
-        //console.log(result)
+        const promises = result.chapter.data.map(async (page:any)=>{
+            const response =  await Image.prefetch(`https://uploads.mangadex.org/data/${hash}/${page}`)
+           return response
+        });
+        await Promise.all(promises)
         
     }
     const incrementpage = () =>{

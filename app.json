@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "androidStatusBar": {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#141212",
       "barStyle": "dark-content",
       "translucent": true,
       "hidden": false
@@ -19,7 +19,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#141212"
     },
     "assetBundlePatterns": [
       "**/*"
