@@ -18,7 +18,7 @@ export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,t
     const removefromrecentreading =async () => {
         if (pathname === "/library"){
             //console.log("hi")
-            await AsyncStorage.removeItem(`manga-current-reading:${mangaid}-${volumeno}-${chapterid}`)
+            await AsyncStorage.removeItem(`manga-current-reading:${mangaid}-${volumeno}`) // -${chapterid}
             setRecentManga([])
         }
         

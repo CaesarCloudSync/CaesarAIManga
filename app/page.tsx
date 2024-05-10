@@ -29,7 +29,7 @@ export default function Page(){
     
     //console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
-        AsyncStorage.setItem(`manga-current-reading:${mangaid}-${volumeno}-${chapterid}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`}))
+        AsyncStorage.setItem(`manga-current-reading:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`})) // -${chapterid}
         router.push("/library")
     }
     const getpages =async () => {
