@@ -38,7 +38,7 @@ export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,t
         <View style={{flex:1,justifyContent:"center",alignItems:"center",backgroundColor:volumecolor}}>
             <TouchableOpacity onLongPress={() =>{removefromrecentreading()}} onPress={() =>{navtochapters()}}>
                 <Image style={{width:175,height:250}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}}></Image>
-                <Text style={{color:"white",width:175}}>{title} - Volume: {volumeno} | {currentpage !== undefined && `Page ${currentpage +1}`}</Text>
+                <Text style={{color:"white",width:175}}>{title} - Volume: {volumeno} {chaptertitle !== undefined && `| Chapter: ${chaptertitle}`} {currentpage !== undefined && `- Page ${currentpage +1}`}</Text>
             </TouchableOpacity>
         </View>
 

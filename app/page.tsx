@@ -71,8 +71,8 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
-    console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
-    console.log(cover_art)
+    //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
+    //console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
