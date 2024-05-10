@@ -37,6 +37,9 @@ export default function MangaPage(){
         */
         setDescription(description)
     }
+    const navsearch = () =>{
+        router.push("/search")
+    }
     useEffect(()=>{
         getmangapage()
     },[])
@@ -46,7 +49,7 @@ export default function MangaPage(){
         <View style={{flex:1,backgroundColor:"#141212"}}>
             <StatusBar  hidden/>
             <View style={{height:20}}>
-            <TouchableOpacity style={{flex:1}} onPress={() =>{navigation.goBack()}}>
+            <TouchableOpacity style={{flex:1}} onPress={() =>{navsearch()}}>
             <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
             </View>

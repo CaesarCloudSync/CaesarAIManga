@@ -61,21 +61,25 @@ export default function Page(){
     }
     const navvolume =async () => {
              
-        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
     
 
+    }
+    const navchapterpage = () =>{
+        router.push({ pathname: "/chapterpage", params: { "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` }});
     }
     useEffect(() =>{
         getpages()
     },[])
     console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
+    console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
     <View style={{flex:1,backgroundColor:"#141212",alignItems:"center"}}>
         <StatusBar  hidden/>
         <View style={{alignSelf:"flex-start"}} >
-            <TouchableOpacity style={{width:100}}  onPress={() =>{navigation.goBack()}}>
+            <TouchableOpacity style={{width:100}}  onPress={() =>{navchapterpage()}}>
             <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
         </View>

@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ChapterPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
-    const { mangaid,title,cover_art,volumeno,cover_id,type}:any = params;
+    const { mangaid,title,cover_art,volumeno,cover_id,type,currentpageparam}:any = params;
     const [chapterfeed,setChapterFeed] = useState("");
     const getchapterpages =async () => {
         //console.log(mangaid)
@@ -29,7 +29,9 @@ export default function ChapterPage(){
         setChapterFeed(result)
         
     }
- 
+    const navmangapage = () =>{
+        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+    }
     useEffect(()=>{
         getchapterpages()
     },[])
@@ -37,14 +39,14 @@ export default function ChapterPage(){
         <View style={{flex:1,backgroundColor:"#141212"}}>
             <View style={{flex:0.04}}>
             <StatusBar  hidden/>
-            <TouchableOpacity style={{flex:1}} onPress={() =>{navigation.goBack()}}>
+            <TouchableOpacity style={{flex:1}} onPress={() =>{navmangapage()}}>
             <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
             </View>
 
             <View style={{flex:0,alignItems:"center"}}>
              
-                <Image style={{width:150,height:225}} alt="hello" source={{uri:cover_art}}></Image>
+                <Image style={{width:150,height:225}} alt="hello" source={{uri:cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` }}></Image>
                 <Text style={{color:"white",fontSize:20}}>{title}</Text>
                 <Text style={{color:"grey",fontSize:13}}>Volume: {volumeno}</Text>
 
@@ -63,7 +65,7 @@ export default function ChapterPage(){
                     renderItem={({item,index}:any) => {
                             return (
                                 
-                                <ChapterCover  key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} ></ChapterCover>
+                                <ChapterCover  key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} currentpageparam={currentpageparam}></ChapterCover>
                 
                             )
                     }
