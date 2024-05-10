@@ -68,7 +68,7 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
-    //console.log(volumeno,"hi")
+    console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
     return(
@@ -89,10 +89,10 @@ export default function Page(){
         <GestureHandlerRootView style={{flex:2}}>
         <GestureDetector gesture={Gesture.Exclusive(flingleft,flingright)}>
             
-        <Image style={{width:414,height:586}} alt="hello" source={{uri:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
+        <Image style={{width:414,height:640}} alt="hello" source={{uri:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
         </GestureDetector>
         </GestureHandlerRootView>
-        <View style={{flex:0.5,flexDirection:"row",gap:25,marginTop:20}}>
+        <View style={{flex:0.3,flexDirection:"row",gap:25,marginTop:20}}>
             <TouchableOpacity  onPress={() =>{decrementpage()}}>
             <AntDesign name="arrowleft" size={35} color="white" />
             </TouchableOpacity>
@@ -100,7 +100,7 @@ export default function Page(){
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.25)}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>{navvolume()}} onLongPress={()=>{setcurrentreading()}}>
-            <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAILogo.png")}></Image>
+            <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAIMangaLogo.png")}></Image>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.75))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.75)}</Text>

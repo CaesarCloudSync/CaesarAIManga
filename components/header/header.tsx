@@ -10,7 +10,7 @@ export default function Header({style}:any){
             
             </View>
             <View style={{flex:0.13,margin:10}}>
-            <Image style={{width:44,height:39}} source={require('./CaesarAILogo.png')} />
+            <Image style={{width:44,height:39}} source={require("./CaesarAIMangaLogo.png")} />
             </View>
 
         </View>
