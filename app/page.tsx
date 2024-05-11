@@ -74,10 +74,10 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
-    //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
+    console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
     //console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
-    //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[0]}`)
+    //console.log({ "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` })
     return(
     <View style={{flex:1,backgroundColor:"#141212",alignItems:"center"}}>
         <StatusBar  hidden/>
@@ -106,7 +106,7 @@ export default function Page(){
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.25))}}>
             <Text style={{color:"white",fontSize:20}}>{Math.round(pages.length * 0.25)}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() =>{navvolume()}} onLongPress={()=>{setcurrentreading()}}>
+            <TouchableOpacity onPress={() =>{navchapterpage()}} onLongPress={()=>{setcurrentreading()}}>
             <Image style={{width:50,height:40}} alt="hello" source={require("./CaesarAIMangaLogo.png")}></Image>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>{snapTo(Math.round(pages.length * 0.75))}}>
