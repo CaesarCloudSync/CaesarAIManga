@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Gesture,GestureDetector,Swipeable,Directions,GestureHandlerRootView } from "react-native-gesture-handler";
+import * as FileSystem from "expo-file-system";
 export default function Page(){
     const flingleft = Gesture.Fling()
     .direction(Directions.LEFT )
@@ -25,7 +26,8 @@ export default function Page(){
     const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam,chaptertitle,volumeno}:any = params;
     //console.log(currentpageparam,"hey")
     const [currentpage,setCurrentPage] = useState(currentpageparam === undefined ? 0 : parseInt(currentpageparam));
-    const [pages,setPages] = useState([]);
+    const [pages,setPages] = useState<any>([]);
+    const [showlocal,setShowLocal] = useState(false);
     
     //console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
@@ -33,17 +35,33 @@ export default function Page(){
         router.push("/library")
     }
     const getpages =async () => {
-        const response = await axios.get(`https://api.mangadex.org/at-home/server/${chapterid}`)
-        let result = response.data
-        let hash = result.chapter.hash
-        setHash(hash)
-        setPages(result.chapter.data)
-        const promises = result.chapter.data.map(async (page:any)=>{
-            const response =  await Image.prefetch(`https://uploads.mangadex.org/data/${hash}/${page}`)
-           return response
-        });
-        await Promise.all(promises)
+        let dir:any = FileSystem.documentDirectory
+        let allfiles = await FileSystem.readDirectoryAsync(dir);
+        let pages = allfiles.filter((file:any) =>{return(file.includes(`${mangaid}_${volumeno}_${chaptertitle.replaceAll(" ","_")}`))})
+        console.log(pages)
+        if (pages.length === 0){
+            const response = await axios.get(`https://api.mangadex.org/at-home/server/${chapterid}`)
+            let result = response.data
+            let hash = result.chapter.hash
+            setHash(hash)
+            setPages(result.chapter.data)
+            const promises = result.chapter.data.map(async (page:any)=>{
+                const response =  await Image.prefetch(`https://uploads.mangadex.org/data/${hash}/${page}`)
+               return response
+            });
+            await Promise.all(promises)
+            setShowLocal(false)
+            
+            
         
+        }
+        else{
+            setShowLocal(true)
+            setPages(pages)
+        }
+
+
+
     }
     const incrementpage = () =>{
         let numpages = pages.length
@@ -74,7 +92,7 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
-    console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
+    //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
     //console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
     //console.log({ "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` })
@@ -95,8 +113,8 @@ export default function Page(){
 
         <GestureHandlerRootView style={{flex:2}}>
         <GestureDetector gesture={Gesture.Exclusive(flingleft,flingright)}>
-            
-        <Image style={{width:414,height:640}} alt="hello" source={{uri:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
+         
+        <Image style={{width:414,height:640}} alt="hello" source={{uri:showlocal === true ? `file:///data/user/0/host.exp.exponent/files/${mangaid}_${volumeno}_${chaptertitle.replaceAll(" ","_")}_${currentpage}.jpg`:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
         </GestureDetector>
         </GestureHandlerRootView>
         <View style={{flex:0.3,flexDirection:"row",gap:25,marginTop:20}}>

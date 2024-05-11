@@ -6,24 +6,26 @@ import ChapterCover from "@/components/chapterpagecomponents/chaptercover";
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system";
 export default function ChapterPage(){
     const navigation = useNavigation();
     const params = useLocalSearchParams();
-    const [progress,setProgress] = useState({});
+    const [progress,setProgress] = useState<any>(0);
     const [downloadedmanga,setDownloadedManga]  = useState<any>([]);
     const { mangaid,title,cover_art,volumeno,cover_id,type,currentpageparam}:any = params;
-    const [chapterfeed,setChapterFeed] = useState("");
+    const [chapterfeed,setChapterFeed] = useState<any>([]);
+    const [totalpages,setTotalPages] = useState(0);
+    const [completedpages,setCompletedPages] = useState(0);
     const callback = (downloadProgress:any) => {
         const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
         setProgress({
           downloadProgress: progress,
         });
       };
-    const getpages =async () => {
+    const getdownloadcontent =async (url:string,title:string) => {
         const downloadResumable = FileSystem.createDownloadResumable(
-            'https://uploads.mangadex.org/data/7dd9b16a7f83881121980b3bf685d5ff/x1-de250240139cdbe166efb2251cb9b6d02029ae72242a953065974a12a0d86581.jpg',
-            FileSystem.documentDirectory + 'chapter1.jpg',
+            url,
+            FileSystem.documentDirectory + title + ".jpg",
             {},
             callback
           );
@@ -33,9 +35,7 @@ export default function ChapterPage(){
           } catch (e) {
             console.error(e);
           }
-          let dir:any = FileSystem.documentDirectory
-          let files = await FileSystem.readDirectoryAsync(dir);
-          console.log(files)
+
           
         
     }
@@ -54,6 +54,7 @@ export default function ChapterPage(){
         if (result.length === 0){
             AsyncStorage.setItem(`un-manga-volume:${mangaid}-${volumeno}`,JSON.stringify({"mangaid":mangaid,"volumeno":volumeno}))
         }
+        const numberprogress = 
         setChapterFeed(result)
         
     }
@@ -61,9 +62,45 @@ export default function ChapterPage(){
         router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
     }
     const download_volume =async () => {
-        await AsyncStorage.setItem(`downloaded:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}))
-        router.push("/downloads")
+       // console.log(chapterfeed)
+        const promises = chapterfeed.map(async (chapter:any) =>{
+            const response = await axios.get(`https://api.mangadex.org/at-home/server/${chapter.id}`)
+            let result = response.data
+            let hash = result.chapter.hash
+            const pages = result.chapter.data.map((page:any) =>{return(`https://uploads.mangadex.org/data/${hash}/${page}`)})
+            return pages
+            
+
+
+        })
+        const pages = await Promise.all(promises)
+        const totalpages = pages.flat().length
+        setTotalPages(totalpages)
+        let doneCount = 0;
+        pages.map(async (chapter:any,chapterindex:any) =>{
+            chapter.map(async (page:any,pageindex:any) =>{
+                doneCount++; 
+                //console.log(doneCount)
+                setCompletedPages(doneCount)
+                //console.log(page)
+                let title_filename = `${mangaid}_${volumeno}_${chapterfeed[chapterindex].attributes.title.replaceAll(" ","_")}_${pageindex}`
+                console.log(title_filename)
+                await getdownloadcontent(page,title_filename)
+            })
+       })
+       
+        //
+        await Promise.all(pages)
+        //let dir:any = FileSystem.documentDirectory
+        //let files = await FileSystem.readDirectoryAsync(dir);
+        //console.log(files)
+        //
+
+
+        //await AsyncStorage.setItem(`downloaded:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}))
+        //router.push("/downloads")
     }
+    //console.log(progress)
     useEffect(()=>{
         getchapterpages()
     },[])
@@ -74,6 +111,14 @@ export default function ChapterPage(){
             <TouchableOpacity style={{flex:1}} onPress={() =>{navmangapage()}}>
             <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
+            </View>
+            <View style={{flex:0.02}}>
+            <View >
+            <View style={{width:50,height:3,backgroundColor:"white"}}>
+            <View style={{width:`${progress*100}%`,height:3,backgroundColor:"blue"}}></View>
+            </View>
+            <Text style={{fontSize:10,justifyContent:"flex-end",color:"white"}}>{completedpages}/{totalpages}</Text>
+            </View>
             </View>
 
             <View style={{flex:0,alignItems:"center"}}>
