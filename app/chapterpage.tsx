@@ -41,6 +41,13 @@ export default function ChapterPage(){
     }
     const getchapterpages =async () => {
         //console.log(mangaid)
+        let keys = await AsyncStorage.getAllKeys()
+        const items:any = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes(`downloaded_volume_chapters:${mangaid}-${volumeno}`))}))
+        const mangaitems = items.map((item:any) =>{return(JSON.parse(item[1]))})
+        if (mangaitems.length !== 0){
+            setChapterFeed(mangaitems[0])
+        }
+        else{
         const responsefeed = await axios.get(`https://api.mangadex.org/manga/${mangaid}/feed`,{params:{"limit":500,"translatedLanguage":["en"],"order":{
             
             "volume":"asc",
@@ -54,9 +61,9 @@ export default function ChapterPage(){
         if (result.length === 0){
             AsyncStorage.setItem(`un-manga-volume:${mangaid}-${volumeno}`,JSON.stringify({"mangaid":mangaid,"volumeno":volumeno}))
         }
-        const numberprogress = 
+        console.log(result)
         setChapterFeed(result)
-        
+    }
     }
     const navmangapage = () =>{
         router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
@@ -91,14 +98,19 @@ export default function ChapterPage(){
        
         //
         await Promise.all(pages)
-        //let dir:any = FileSystem.documentDirectory
-        //let files = await FileSystem.readDirectoryAsync(dir);
-        //console.log(files)
-        //
 
 
-        //await AsyncStorage.setItem(`downloaded:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}))
-        //router.push("/downloads")
+       const volume_data = {"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}
+       // volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} currentpageparam={currentpageparam}
+        await AsyncStorage.setItem(`downloaded_volume:${mangaid}-${volumeno}`,JSON.stringify(volume_data))
+        const chapter_data = chapterfeed.map((item:any) =>{
+            let chapter_item = {"volumeno":volumeno,"mangaid":mangaid,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1)[0] :`${cover_art}`,"id":item.id,"attributes":{"title":item.attributes.title,"chapter":item.attributes.chapter}}
+            return chapter_item
+        })
+        await AsyncStorage.setItem(`downloaded_volume_chapters:${mangaid}-${volumeno}`,JSON.stringify(chapter_data))
+        
+        
+        router.push("/downloads")
     }
     //console.log(progress)
     useEffect(()=>{

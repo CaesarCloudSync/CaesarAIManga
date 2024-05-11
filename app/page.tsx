@@ -38,7 +38,7 @@ export default function Page(){
         let dir:any = FileSystem.documentDirectory
         let allfiles = await FileSystem.readDirectoryAsync(dir);
         let pages = allfiles.filter((file:any) =>{return(file.includes(`${mangaid}_${volumeno}_${chaptertitle.replaceAll(" ","_")}`))})
-        console.log(pages)
+        //console.log(pages)
         if (pages.length === 0){
             const response = await axios.get(`https://api.mangadex.org/at-home/server/${chapterid}`)
             let result = response.data
@@ -92,6 +92,7 @@ export default function Page(){
     useEffect(() =>{
         getpages()
     },[])
+
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
     //console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
