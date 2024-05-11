@@ -33,7 +33,7 @@ export default function Downloads(){
           }
           let dir:any = FileSystem.documentDirectory
           let files = await FileSystem.readDirectoryAsync(dir);
-          console.log(files)
+          //console.log(files)
           
         
     }
@@ -72,7 +72,7 @@ export default function Downloads(){
         
                             return (
                               
-                                <VolumeCover key={index}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id}  cover_art={item.cover_art}></VolumeCover> 
+                                <VolumeCover key={index}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id}  cover_art={item.cover_art} setRecentManga={setDownloadedManga}></VolumeCover> 
                                 
                                 
 

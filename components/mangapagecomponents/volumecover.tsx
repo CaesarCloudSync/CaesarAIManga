@@ -3,6 +3,7 @@ import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-rou
 import { usePathname } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import * as FileSystem from 'expo-file-system';
 export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,type,chapterid,currentpage,setRecentManga,chaptertitle}:any){
     const router = useRouter();
     const pathname = usePathname();
@@ -20,6 +21,21 @@ export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,t
             //console.log("hi")
             await AsyncStorage.removeItem(`manga-current-reading:${mangaid}-${volumeno}`) // -${chapterid}
             setRecentManga([])
+        }
+        if (pathname === "/downloads"){
+            await AsyncStorage.removeItem(`downloaded_volume_chapters:${mangaid}-${volumeno}`)
+            await AsyncStorage.removeItem(`downloaded_volume:${mangaid}-${volumeno}`)
+            let dir:any = FileSystem.documentDirectory
+            let allfiles = await FileSystem.readDirectoryAsync(dir);
+            //console.log(allfiles)
+            let volume_files = allfiles.filter((file:any) =>{return(file.includes(`${mangaid}_${volumeno}`))})
+            const promises = volume_files.map(async (page:any) =>{
+                await FileSystem.deleteAsync(dir+page)
+            })
+            await Promise.all(promises)
+            //console.log(volume_files)
+            setRecentManga([])
+
         }
         
     }
