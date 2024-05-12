@@ -28,6 +28,7 @@ export default function Index() {
         const mangafeed = shounenfeed.concat(shoujofeed).concat(seinenfeed)
         //let keys = await AsyncStorage.getAllKeys()
         //const items:any = await AsyncStorage.multiRemove(keys.filter((key:any) =>{return(key.includes("manga-current-reading:"))}))
+        //console.log(mangafeed)
         setMangaFeed(mangafeed)
     }
     
