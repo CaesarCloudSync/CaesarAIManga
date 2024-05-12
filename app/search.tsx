@@ -6,7 +6,9 @@ import NavigationFooter from "./footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { AntDesign } from '@expo/vector-icons';
+import { useNetInfo } from "@react-native-community/netinfo";
 export default function Search(){
+    const netInfo = useNetInfo();
     const [text,setText] = useState("");
     const [searchresults,setSearchResults] = useState([]);
     const [recentmanga,setRecentManga]  = useState<any>([]);
@@ -35,9 +37,12 @@ export default function Search(){
 
      useEffect(() =>{
         if (recentmanga.length === 0){
+            if (netInfo.isInternetReachable === true){
             getrecentmanga()
         }
-     },[recentmanga])
+        }
+     },[recentmanga,netInfo])
+     if (netInfo.isInternetReachable === true){
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
                 <StatusBar  hidden/>
@@ -125,4 +130,36 @@ export default function Search(){
         <NavigationFooter style={{flex:0.1}} currentpage={"search"}/>
         </View>
     )
+}
+else{
+    return(
+        <View style={{flex:1}}>
+            {/*Header */}
+            <View  style={{flex:0.08,flexDirection:"row",backgroundColor:"#141212"}}>
+                <View style={{flex:1,margin:10}}>
+                <Text style={{fontSize:20}}>CaesarAIMusicStream</Text>
+                
+                </View>
+                <View style={{flex:0.13,margin:10}}>
+                <Image style={{width:44,height:39}} source={require('./CaesarAIMangaLogo.png')} ></Image>
+                </View>
+
+            </View>
+            {/* No Internet Main Body */}
+            <View style={{flex:1,backgroundColor:"#141212",justifyContent:"center",alignItems:"center"}}>
+                <Text style={{fontSize:30}}>No Internet Connection</Text>
+                <Text>
+                Read your Downloads
+                </Text>
+            </View>
+
+
+
+            {/*Navigation Footer*/}
+            <NavigationFooter currentpage={"home"}/>
+
+        </View>
+    )
+    
+}
 }

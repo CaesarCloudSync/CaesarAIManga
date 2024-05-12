@@ -1,4 +1,4 @@
-import { FlatList, View,Text } from 'react-native';
+import { FlatList, View,Text,Image } from 'react-native';
 
 import { Link } from 'expo-router';
 import axios from 'axios';
@@ -9,8 +9,9 @@ import Header from '@/components/header/header';
 import NavigationFooter from './footer';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from '@react-native-community/netinfo';
 export default function Index() {
-  
+    const netInfo = useNetInfo();
     const [mangafeed,setMangaFeed] = useState([]);
     const getmangafeed = async (params:any) =>{
         const response = await axios.get("https://api.mangadex.org/manga?limit=100&originalLanguage[]=ja&availableTranslatedLanguage[]=en",{"params":params}) //&updatedAtSince=
@@ -33,8 +34,12 @@ export default function Index() {
 
 useEffect(() =>{
     // setMangaFeed(mangafeed)
-    getallmangafeed()
+    if (netInfo.isInternetReachable === true){
+        getallmangafeed()
+    }
+    
 },[])
+if (netInfo.isInternetReachable === true){
   return (
     <View style={{flex:1,backgroundColor:"#141212"}}>
         <StatusBar  hidden/>
@@ -68,4 +73,36 @@ useEffect(() =>{
 
     </View>
   );
+}
+else{
+    return(
+        <View style={{flex:1}}>
+            {/*Header */}
+            <View  style={{flex:0.08,flexDirection:"row",backgroundColor:"#141212"}}>
+                <View style={{flex:1,margin:10}}>
+                <Text style={{fontSize:20}}>CaesarAIMusicStream</Text>
+                
+                </View>
+                <View style={{flex:0.13,margin:10}}>
+                <Image style={{width:44,height:39}} source={require('./CaesarAIMangaLogo.png')} ></Image>
+                </View>
+
+            </View>
+            {/* No Internet Main Body */}
+            <View style={{flex:1,backgroundColor:"#141212",justifyContent:"center",alignItems:"center"}}>
+                <Text style={{fontSize:30}}>No Internet Connection</Text>
+                <Text>
+                Read your Downloads
+                </Text>
+            </View>
+
+
+
+            {/*Navigation Footer*/}
+            <NavigationFooter currentpage={"home"}/>
+
+        </View>
+    )
+    
+}
 }
