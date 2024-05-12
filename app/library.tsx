@@ -41,7 +41,7 @@ export default function Library(){
      useEffect(()=>{
         
         if (recentmanga.length === 0){
-            console.log(netInfo.isInternetReachable)
+            //console.log(netInfo.isInternetReachable)
             if (netInfo.isInternetReachable === true){
                 getcurrentreading()
             }

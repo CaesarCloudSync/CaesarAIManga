@@ -75,7 +75,20 @@ if (netInfo.isInternetReachable === true){
     </View>
   );
 }
-else{
+else if (netInfo.isInternetReachable === null){
+    return(
+        <View style={{flex:1,backgroundColor:"#141212"}}>
+        <StatusBar  hidden/>
+        <Header style={{flex:1}}/>
+        {<View style={{flex:1}}></View>}
+        <NavigationFooter currentpage={"home"}></NavigationFooter>
+
+  
+
+    </View>
+    )
+}
+else if (netInfo.isInternetReachable === false){
     return(
         <View style={{flex:1}}>
             {/*Header */}
@@ -87,6 +100,7 @@ else{
                 Read your Downloads
                 </Text>
             </View>
+            
 
 
 

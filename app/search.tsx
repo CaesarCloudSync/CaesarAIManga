@@ -132,7 +132,53 @@ export default function Search(){
         </View>
     )
 }
-else{
+else if (netInfo.isInternetReachable === null){
+    return(
+        <View style={{flex:1,backgroundColor:"#141212"}}>
+        <StatusBar  hidden/>
+        {searchresults.length !== 0 &&
+        <TouchableOpacity onPress={() =>{setSearchResults([])}} style={{alignSelf:"flex-end"}}>
+        <AntDesign name="arrowright" size={24} color="white" />
+        </TouchableOpacity>}
+
+        <View style={{ flex:0.1,flexDirection:"row",justifyContent:"center",alignItems:"center"}}>
+        <View style={{height:30,borderTopLeftRadius:5,borderBottomLeftRadius:5,backgroundColor:"white",justifyContent:"center",padding:3}}>
+            <AntDesign name="search1" size={20} color="black" />
+        </View>
+        
+        <TextInput
+        onSubmitEditing={() =>{searchmanga()}}
+        placeholder="What manga would you like to read?"
+        placeholderTextColor={'black'}
+        
+        style={ {
+            height: 30,
+            width:"70%",
+           
+            
+            borderBottomRightRadius:5,borderTopRightRadius:5,
+
+            backgroundColor:"white",
+            color:"black"
+          }}
+        onChangeText={setText}
+        value={text}
+    />
+    <View style={{flex:0.13,marginLeft:15}}>
+        <Image style={{width:44,height:39}} source={require("./CaesarAIMangaLogo.png")} />
+        </View>
+    </View>
+
+
+
+{<View style={{flex:1}}></View>}
+{/*searchresults.length === 0 && <View style={{flex:1}}></View>*/}
+<NavigationFooter style={{flex:0.1}} currentpage={"search"}/>
+</View>
+    )
+
+}
+else if (netInfo.isInternetReachable === false){
     return(
         <View style={{flex:1}}>
             {/*Header */}
