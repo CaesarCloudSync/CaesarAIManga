@@ -115,7 +115,7 @@ export default function Page(){
         <GestureHandlerRootView style={{flex:2}}>
         <GestureDetector gesture={Gesture.Exclusive(flingleft,flingright)}>
          
-        <Image style={{width:414,height:640}} alt="hello" source={{uri:showlocal === true ? `file:///data/user/0/host.exp.exponent/files/${mangaid}_${volumeno}_${chaptertitle.replaceAll(" ","_")}_${currentpage}.jpg`:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
+        <Image style={{width:414,height:640}} alt="hello" source={{uri:showlocal === true ? `${FileSystem.documentDirectory}/${mangaid}_${volumeno}_${chaptertitle.replaceAll(" ","_")}_${currentpage}.jpg`:`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`}}></Image>
         </GestureDetector>
         </GestureHandlerRootView>
         <View style={{flex:0.3,flexDirection:"row",gap:25,marginTop:20}}>
