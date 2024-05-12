@@ -1,1 +1,1 @@
-eas build --platform android --profile preview
+eas build --platform android --profile preview --local
