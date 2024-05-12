@@ -7,8 +7,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
+import { useNetInfo } from "@react-native-community/netinfo";
 export default function ChapterPage(){
     const navigation = useNavigation();
+    const netInfo = useNetInfo();
     const params = useLocalSearchParams();
     const [progress,setProgress] = useState<any>(0);
     const [downloadedmanga,setDownloadedManga]  = useState<any>([]);
@@ -66,7 +68,12 @@ export default function ChapterPage(){
     }
     }
     const navmangapage = () =>{
-        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        if (netInfo.isInternetReachable === true){
+            router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        }
+        else{
+            router.push("/downloads")
+        }
     }
     const download_volume =async () => {
        // console.log(chapterfeed)

@@ -39,7 +39,7 @@ useEffect(() =>{
         getallmangafeed()
     }
     
-},[])
+},[netInfo])
 if (netInfo.isInternetReachable === true){
   return (
     <View style={{flex:1,backgroundColor:"#141212"}}>

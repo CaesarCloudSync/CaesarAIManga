@@ -82,6 +82,7 @@ export default function Downloads(){
                 }
 
             />}
+            {downloadedmanga.length === 0 && <View style={{flex:1}}></View>}
 
             <NavigationFooter style={{flex:0.1}} currentpage={"downloads"}/>
 

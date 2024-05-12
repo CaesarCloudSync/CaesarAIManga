@@ -41,7 +41,7 @@ export default function Search(){
             getrecentmanga()
         }
         }
-     },[recentmanga,netInfo])
+     },[netInfo,recentmanga])
      if (netInfo.isInternetReachable === true){
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
@@ -156,7 +156,7 @@ else{
 
 
             {/*Navigation Footer*/}
-            <NavigationFooter currentpage={"home"}/>
+            <NavigationFooter currentpage={"search"}/>
 
         </View>
     )
