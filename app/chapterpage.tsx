@@ -24,23 +24,7 @@ export default function ChapterPage(){
           downloadProgress: progress,
         });
       };
-    const getdownloadcontent =async (url:string,title:string) => {
-        const downloadResumable = FileSystem.createDownloadResumable(
-            url,
-            FileSystem.documentDirectory + title + ".jpg",
-            {},
-            callback
-          );
-          try {
-            const { uri }:any = await downloadResumable.downloadAsync();
-            console.log('Finished downloading to ', uri);
-          } catch (e) {
-            console.error(e);
-          }
 
-          
-        
-    }
     const getchapterpages =async () => {
         //console.log(mangaid)
         let keys = await AsyncStorage.getAllKeys()
@@ -63,7 +47,7 @@ export default function ChapterPage(){
         if (result.length === 0){
             AsyncStorage.setItem(`un-manga-volume:${mangaid}-${volumeno}`,JSON.stringify({"mangaid":mangaid,"volumeno":volumeno}))
         }
-        console.log(result)
+        //console.log(result)
         setChapterFeed(result)
     }
     }
@@ -91,20 +75,34 @@ export default function ChapterPage(){
         const totalpages = pages.flat().length
         setTotalPages(totalpages)
         let doneCount = 0;
-        pages.map(async (chapter:any,chapterindex:any) =>{
-            chapter.map(async (page:any,pageindex:any) =>{
-                doneCount++; 
-                //console.log(doneCount)
-                setCompletedPages(doneCount)
+        const pagepromises = pages.map(async (chapter:any,chapterindex:any) =>{
+           const chapterpromises =  chapter.map(async (page:any,pageindex:any) =>{
+
                 //console.log(page)
                 let title_filename = `${mangaid}_${volumeno}_${chapterfeed[chapterindex].attributes.title.replaceAll(" ","_")}_${pageindex}`
                 console.log(title_filename)
-                await getdownloadcontent(page,title_filename)
+                const downloadResumable = FileSystem.createDownloadResumable(
+                    page,
+                    FileSystem.documentDirectory + title_filename + ".jpg",
+                    {},
+                    callback
+                  );
+                  try {
+                    const { uri }:any = await downloadResumable.downloadAsync();
+                    console.log('Finished downloading to ', uri);
+                    doneCount++; 
+                    console.log(doneCount)
+                    setCompletedPages(doneCount)
+                  } catch (e) {
+                    console.error(e);
+                  }
+        
             })
+            await Promise.all(chapterpromises)
        })
        
         //
-        await Promise.all(pages)
+        await Promise.all(pagepromises )
 
 
        const volume_data = {"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}
@@ -132,12 +130,14 @@ export default function ChapterPage(){
             </TouchableOpacity>
             </View>
             <View style={{flex:0.02}}>
-            <View >
+            {completedpages > 0 &&
+            <View style ={{alignSelf:"flex-end"}} >
             <View style={{width:50,height:3,backgroundColor:"white"}}>
-            <View style={{width:`${progress*100}%`,height:3,backgroundColor:"blue"}}></View>
+            <View style={{width:`${(completedpages/totalpages)*100}%`,height:3,backgroundColor:"blue"}}></View>
             </View>
             <Text style={{fontSize:10,justifyContent:"flex-end",color:"white"}}>{completedpages}/{totalpages}</Text>
             </View>
+            }   
             </View>
 
             <View style={{flex:0,alignItems:"center"}}>

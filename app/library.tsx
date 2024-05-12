@@ -11,6 +11,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 export default function Library(){
     const [recentmanga,setRecentManga]= useState<any>([]);
     const netInfo = useNetInfo();
+
     const getcurrentreading =async () => {
         let keys = await AsyncStorage.getAllKeys()
         const items:any = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes("manga-current-reading:"))}))
@@ -34,20 +35,23 @@ export default function Library(){
             }
          })
          const downloaded_current_reading = (await Promise.all(mangaitemspromises)).filter((item) =>{return(item !== null)})
-         console.log(downloaded_current_reading)
+         //console.log(downloaded_current_reading)
          setRecentManga(downloaded_current_reading)
      }
-    useEffect(()=>{
+     useEffect(()=>{
+        
         if (recentmanga.length === 0){
+            console.log(netInfo.isInternetReachable)
             if (netInfo.isInternetReachable === true){
                 getcurrentreading()
             }
-            else{
+            else if (netInfo.isInternetReachable === false){
                 get_downloaded_current_reading()
             }
         
     }
     },[netInfo,recentmanga])
+
     //console.log("hi")
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>

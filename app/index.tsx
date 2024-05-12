@@ -79,20 +79,11 @@ else{
     return(
         <View style={{flex:1}}>
             {/*Header */}
-            <View  style={{flex:0.08,flexDirection:"row",backgroundColor:"#141212"}}>
-                <View style={{flex:1,margin:10}}>
-                <Text style={{fontSize:20}}>CaesarAIMusicStream</Text>
-                
-                </View>
-                <View style={{flex:0.13,margin:10}}>
-                <Image style={{width:44,height:39}} source={require('./CaesarAIMangaLogo.png')} ></Image>
-                </View>
-
-            </View>
+            <Header style={{flex:1}}/>
             {/* No Internet Main Body */}
             <View style={{flex:1,backgroundColor:"#141212",justifyContent:"center",alignItems:"center"}}>
-                <Text style={{fontSize:30}}>No Internet Connection</Text>
-                <Text>
+                <Text style={{fontSize:30,color:"white"}}>No Internet Connection</Text>
+                <Text style={{color:"white"}}>
                 Read your Downloads
                 </Text>
             </View>
