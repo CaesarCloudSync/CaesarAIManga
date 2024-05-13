@@ -78,9 +78,10 @@ export default function ChapterPage(){
         const pagepromises = pages.map(async (chapter:any,chapterindex:any) =>{
            const chapterpromises =  chapter.map(async (page:any,pageindex:any) =>{
 
-                //console.log(page)
+                console.log(chapterfeed[chapterindex].attributes.title)
+               if (chapterfeed[chapterindex].attributes.title !== null){
                 let title_filename = `${mangaid}_${volumeno}_${chapterfeed[chapterindex].attributes.title.replaceAll(" ","_")}_${pageindex}`
-                console.log(title_filename)
+                //console.log(title_filename)
                 const downloadResumable = FileSystem.createDownloadResumable(
                     page,
                     FileSystem.documentDirectory + title_filename + ".jpg",
@@ -89,13 +90,14 @@ export default function ChapterPage(){
                   );
                   try {
                     const { uri }:any = await downloadResumable.downloadAsync();
-                    console.log('Finished downloading to ', uri);
+                    //console.log('Finished downloading to ', uri);
                     doneCount++; 
                     console.log(doneCount)
                     setCompletedPages(doneCount)
                   } catch (e) {
                     console.error(e);
                   }
+                }
         
             })
             await Promise.all(chapterpromises)
