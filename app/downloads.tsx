@@ -42,7 +42,7 @@ export default function Downloads(){
         const items:any = await AsyncStorage.multiGet(keys.filter((key) =>{return(key.includes("downloaded_volume:"))}))
          //console.log(items)
          const mangaitems = items.map((item:any) =>{return(JSON.parse(item[1]))})
-         //console.log(mangaitems)
+         console.log(mangaitems)
         setDownloadedManga(mangaitems)
         
      }

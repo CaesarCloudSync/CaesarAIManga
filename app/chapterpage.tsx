@@ -105,13 +105,29 @@ export default function ChapterPage(){
        
         //
         await Promise.all(pagepromises )
+        let cover_art_filename = cover_art.includes("http") ? cover_art.split("/").slice(-1)[0]  : cover_art
+        let cover_art_url = cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`
+        const downloadResumable = FileSystem.createDownloadResumable(
+            cover_art_url,
+            FileSystem.documentDirectory + cover_art_filename,
+            {},
+            callback
+        );
+        try {
+            const { uri }:any = await downloadResumable.downloadAsync();
+            //console.log('Finished downloading to ', uri);
 
+        } catch (e) {
+            console.error(e);
+        }
+       console.log(cover_art_filename)
+       console.log(cover_art_url)
 
-       const volume_data = {"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1) :`${cover_art}`}
+       const volume_data = {"volumeno":volumeno,"mangaid":mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art_filename}
        // volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} currentpageparam={currentpageparam}
         await AsyncStorage.setItem(`downloaded_volume:${mangaid}-${volumeno}`,JSON.stringify(volume_data))
         const chapter_data = chapterfeed.map((item:any) =>{
-            let chapter_item = {"volumeno":volumeno,"mangaid":mangaid,"cover_art":cover_art.includes("http") ? cover_art.split("/").slice(-1)[0] :`${cover_art}`,"id":item.id,"attributes":{"title":item.attributes.title,"chapter":item.attributes.chapter}}
+            let chapter_item = {"volumeno":volumeno,"mangaid":mangaid,"cover_art":cover_art_filename,"id":item.id,"attributes":{"title":item.attributes.title,"chapter":item.attributes.chapter}}
             return chapter_item
         })
         await AsyncStorage.setItem(`downloaded_volume_chapters:${mangaid}-${volumeno}`,JSON.stringify(chapter_data))

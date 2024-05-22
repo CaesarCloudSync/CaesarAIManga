@@ -4,7 +4,9 @@ import { usePathname } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import * as FileSystem from 'expo-file-system';
+import { useNetInfo } from "@react-native-community/netinfo";
 export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,type,chapterid,currentpage,setRecentManga,chaptertitle}:any){
+    const netInfo = useNetInfo();
     const router = useRouter();
     const pathname = usePathname();
     const [volumecolor,setVolumeColor] = useState("#141212")
@@ -53,7 +55,7 @@ export default function VolumeCover({mangaid,cover_art,volumeno,title,cover_id,t
     return(
         <View style={{flex:1,justifyContent:"center",alignItems:"center",backgroundColor:volumecolor}}>
             <TouchableOpacity onLongPress={() =>{removefromrecentreading()}} onPress={() =>{navtochapters()}}>
-                <Image style={{width:175,height:250}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}}></Image>
+                <Image style={{width:175,height:250}} alt="hello" source={{uri:netInfo.isInternetReachable === true ? `https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` : FileSystem.documentDirectory + cover_art}}></Image>
                 <Text style={{color:"white",width:175}}>{title} - Volume: {volumeno} {chaptertitle !== undefined && `| Chapter: ${chaptertitle}`} {currentpage !== undefined && `- Page ${currentpage +1}`}</Text>
             </TouchableOpacity>
         </View>
