@@ -9,9 +9,11 @@ import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MangaCover from "@/components/homecomponents/MangaCover";
 import VolumeCover from "@/components/mangapagecomponents/volumecover";
+import { useNetInfo } from "@react-native-community/netinfo";
 export default function Downloads(){
     const [progress,setProgress] = useState({});
     const [downloadedmanga,setDownloadedManga]  = useState<any>([]);
+    const netInfo = useNetInfo();
     const callback = (downloadProgress:any) => {
         const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
         setProgress({
@@ -52,7 +54,7 @@ export default function Downloads(){
         if (downloadedmanga.length === 0){
             getdownloadedmanga()
         }
-     },[downloadedmanga])
+     },[netInfo,downloadedmanga])
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
             <StatusBar  hidden/>
@@ -69,8 +71,9 @@ export default function Downloads(){
 
                     data={downloadedmanga}
                     renderItem={({item,index}:any) => {
-        
+                      console.log(item.cover_art)
                             return (
+                              
                               
                                 <VolumeCover key={index}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id}  cover_art={item.cover_art} setRecentManga={setDownloadedManga}></VolumeCover> 
                                 

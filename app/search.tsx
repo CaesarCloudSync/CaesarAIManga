@@ -182,6 +182,7 @@ else if (netInfo.isInternetReachable === false){
     return(
         <View style={{flex:1}}>
             {/*Header */}
+            <StatusBar  hidden/>
             <Header style={{flex:1}}/>
             {/* No Internet Main Body */}
             <View style={{flex:1,backgroundColor:"#141212",justifyContent:"center",alignItems:"center"}}>

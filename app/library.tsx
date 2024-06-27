@@ -70,8 +70,8 @@ export default function Library(){
 
                     data={recentmanga}
                     renderItem={({item,index}:any) => {
-                        let cover_filename = item.cover_art.split("/").slice(-1)
-                      
+                        let cover_filename = item.cover_art.split("/").slice(-1)[0]
+                        console.log(cover_filename)
                             return (
                                 
                                 

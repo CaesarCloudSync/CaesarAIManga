@@ -106,6 +106,7 @@ export default function ChapterPage(){
         //
         await Promise.all(pagepromises )
         let cover_art_filename = cover_art.includes("http") ? cover_art.split("/").slice(-1)[0]  : cover_art
+        console.log(cover_art_filename)
         let cover_art_url = cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`
         const downloadResumable = FileSystem.createDownloadResumable(
             cover_art_url,
