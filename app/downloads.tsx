@@ -75,7 +75,7 @@ export default function Downloads(){
                             return (
                               
                               
-                                <VolumeCover key={index} online={netInfo.isInternetReachable === true ? true : false}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id}  cover_art={item.cover_art} setRecentManga={setDownloadedManga}></VolumeCover> 
+                                <VolumeCover key={index} offline={netInfo.isInternetReachable === false ? true : false}  volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id}  cover_art={item.cover_art} setRecentManga={setDownloadedManga}></VolumeCover> 
                                 
                                 
 

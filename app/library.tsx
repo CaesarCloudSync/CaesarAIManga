@@ -74,7 +74,7 @@ export default function Library(){
                             return (
                                 
                                 
-                                <VolumeCover key={index} online={netInfo.isInternetReachable === true ? true : false} chaptertitle={item.chaptertitle} currentpage={item.currentpage} chapterid={item.chapterid} volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={cover_filename} setRecentManga={setRecentManga} ></VolumeCover>
+                                <VolumeCover key={index} online={netInfo.isInternetReachable === false ? true : false} chaptertitle={item.chaptertitle} currentpage={item.currentpage} chapterid={item.chapterid} volumeno={item.volumeno} mangaid={item.mangaid} title={item.title} cover_id={item.cover_id} t cover_art={cover_filename} setRecentManga={setRecentManga} ></VolumeCover>
                 
                             )
                     }
