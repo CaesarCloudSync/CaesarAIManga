@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Gesture,GestureDetector,Swipeable,Directions,GestureHandlerRootView } from "react-native-gesture-handler";
 import * as FileSystem from "expo-file-system";
+import { useNetInfo } from "@react-native-community/netinfo";
 export default function Page(){
     const flingleft = Gesture.Fling()
     .direction(Directions.LEFT )
@@ -22,6 +23,7 @@ export default function Page(){
 
     const navigation = useNavigation();
     const params = useLocalSearchParams();
+    const netInfo = useNetInfo();
     const [hash,setHash] = useState("");
     const { chapterid,mangaid,cover_id,title,cover_art,currentpageparam,chaptertitle,volumeno}:any = params;
     //console.log(currentpageparam,"hey")
@@ -31,7 +33,13 @@ export default function Page(){
     
     //console.log("hi",chapterid,mangaid,cover_id,title,cover_art,volumeno)
     const setcurrentreading =async () => {
-        AsyncStorage.setItem(`manga-current-reading:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${cover_art}`})) // -${chapterid}
+        //console.log(cover_art)
+        let keys = await AsyncStorage.getAllKeys()
+        const downloaded_item = await AsyncStorage.getItem(`downloaded_volume:${mangaid}-${volumeno}`)
+        //console.log(downloaded_item)
+        const filtered_cover_art = downloaded_item ? FileSystem.documentDirectory+cover_art.replace(FileSystem.documentDirectory,"").split("/").slice(-1)[0] : cover_art
+        //console.log(filtered_cover_art,"filyered")
+        await AsyncStorage.setItem(`manga-current-reading:${mangaid}-${volumeno}`,JSON.stringify({"volumeno":volumeno,"chaptertitle":chaptertitle,"chapterid":chapterid,"currentpage":currentpage,"mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":`${filtered_cover_art}`})) // -${chapterid}
         router.push("/library")
     }
     const getpages =async () => {
@@ -81,22 +89,23 @@ export default function Page(){
 
     }
     const navvolume =async () => {
-             
-        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`}});
+        
+        router.push({ pathname: "/mangapage", params: { "mangaid": mangaid,"cover_id":cover_id,"title":title,"cover_art":netInfo.isInternetReachable === false ? FileSystem.documentDirectory + (cover_art.includes("file:///") ? cover_art.replace(FileSystem.documentDirectory,"") : cover_art.replace(`https://uploads.mangadex.org/covers/${mangaid}/`,"")):cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` }});
     
 
     }
     const navchapterpage = () =>{
-        router.push({ pathname: "/chapterpage", params: { "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` }});
+        console.log(cover_art)
+        router.push({ pathname: "/chapterpage", params: { "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":netInfo.isInternetReachable === false ? FileSystem.documentDirectory + (cover_art.includes("file:///") ? cover_art.replace(FileSystem.documentDirectory,"") : cover_art.replace(`https://uploads.mangadex.org/covers/${mangaid}/`,"")):cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`  }});
     }
     useEffect(() =>{
         getpages()
-    },[])
+    },[netInfo])
 
     //console.log(`https://uploads.mangadex.org/data/${hash}/${pages[currentpage]}`)
     //console.log(cover_art)
     // JSON.stringify({ "mangaid": mangaid,"cover_id":cover_id,"title":title,"type":type,"cover_art":`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`})
-    //console.log({ "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` })
+    //console.log({ "volumeno":volumeno,"chaptertitle":chaptertitle,"mangaid": mangaid,"title":title,"cover_id":cover_id,"cover_art":netInfo.isInternetReachable === false ? FileSystem.documentDirectory + (cover_art.includes("file:///") ? cover_art.replace(FileSystem.documentDirectory,"") : cover_art.replace(`https://uploads.mangadex.org/covers/${mangaid}/`,"")):cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}`  })
     return(
     <View style={{flex:1,backgroundColor:"#141212",alignItems:"center"}}>
         <StatusBar  hidden/>

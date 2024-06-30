@@ -18,6 +18,8 @@ export default function ChapterPage(){
     const [chapterfeed,setChapterFeed] = useState<any>([]);
     const [totalpages,setTotalPages] = useState(0);
     const [completedpages,setCompletedPages] = useState(0);
+    
+    const [cover_art_url,setCoverArtURL] = useState("");
     const callback = (downloadProgress:any) => {
         const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
         setProgress({
@@ -137,9 +139,17 @@ export default function ChapterPage(){
         router.push("/downloads")
     }
     //console.log(progress)
+    const get_cover_art =async () => {
+        const cover_art_url = netInfo.isInternetReachable === false ? FileSystem.documentDirectory + (cover_art.includes("file:///") ? cover_art.replace(FileSystem.documentDirectory,"") : cover_art.replace(`https://uploads.mangadex.org/covers/${mangaid}/`,"")):cover_art.includes("http") ? cover_art :cover_art.includes("file:///") ? `https://uploads.mangadex.org/covers/${mangaid}/${cover_art.replace(FileSystem.documentDirectory,"")}` :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` 
+        setCoverArtURL(cover_art_url)
+    }
     useEffect(()=>{
         getchapterpages()
-    },[])
+        get_cover_art()
+    },[netInfo])
+
+    //   
+    //console.log("hello",cover_art_url)
     return(
         <View style={{flex:1,backgroundColor:"#141212"}}>
             <View style={{flex:0.04}}>
@@ -158,18 +168,20 @@ export default function ChapterPage(){
             </View>
             }   
             </View>
-
+            {cover_art_url !== "" &&
+            
             <View style={{flex:0,alignItems:"center"}}>
              
                 <TouchableOpacity onLongPress={() =>{download_volume()}}>
-                    <Image style={{width:150,height:225}} alt="hello" source={{uri:cover_art.includes("http") ? cover_art :`https://uploads.mangadex.org/covers/${mangaid}/${cover_art}` }}></Image>
+                    <Image style={{width:150,height:225}} alt="hello" source={{uri:cover_art_url}}></Image>
                 </TouchableOpacity>
                 <Text style={{color:"white",fontSize:20}}>{title}</Text>
                 <Text style={{color:"grey",fontSize:13}}>Volume: {volumeno}</Text>
 
-            </View>
+            </View>}
 
-            {chapterfeed.length !== 0 &&
+
+            {chapterfeed.length !== 0 && cover_art_url !== ""&& 
             <FlatList
                     numColumns={2}
                     style={{flex:0.1}}
@@ -182,7 +194,7 @@ export default function ChapterPage(){
                     renderItem={({item,index}:any) => {
                             return (
                                 
-                                <ChapterCover  key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art} cover_id={cover_id} type={type} currentpageparam={currentpageparam}></ChapterCover>
+                                <ChapterCover  key={index} volumeno={volumeno} chapterid={item.id} title={title} chaptertitle={item.attributes.title} chapter={item.attributes.chapter}  mangaid={mangaid} cover_art={cover_art_url} cover_id={cover_id} type={type} currentpageparam={currentpageparam}></ChapterCover>
                 
                             )
                     }

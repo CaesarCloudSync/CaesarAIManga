@@ -7,6 +7,8 @@ import axios from "axios";
 import { FlatList } from "react-native";
 import VolumeCover from "@/components/mangapagecomponents/volumecover";
 import { StatusBar } from "expo-status-bar";
+import { useNetInfo } from "@react-native-community/netinfo";
+import * as FileSystem from "expo-file-system";
 export default function MangaPage(){
     const [description,setDescription] = useState("");
     const [volumefeed,setVolumeFeed] = useState<any>([]);
@@ -16,6 +18,7 @@ export default function MangaPage(){
     const { mangaid,cover_id,title,type,cover_art}:any = params;
     //console.log("hem",type)
     //console.log(mangaid,title,cover_art)
+    const netInfo = useNetInfo();
     const getmangapage = async () => {
         const response = await axios.get(`https://api.mangadex.org/manga/${mangaid}`)
         let result = response.data.data.attributes
@@ -63,7 +66,7 @@ export default function MangaPage(){
                 :
                 volumefeed.length !== 0 &&
                 <View style={{flex:0,alignItems:"center"}}>
-                    <Image style={{width:150,height:225}} alt="hello" source={{uri:`https://uploads.mangadex.org/covers/${mangaid}/${volumefeed[0].attributes.fileName}`}}></Image>
+                    <Image style={{width:150,height:225}} alt="hello" source={{uri: netInfo.isInternetReachable === false ? FileSystem.documentDirectory + (cover_art.includes("file:///") ? cover_art.replace(FileSystem.documentDirectory,"") : cover_art.replace(`https://uploads.mangadex.org/covers/${mangaid}/`,"")):cover_art.includes("http") ? cover_art :cover_art.includes("file:///") ? `https://uploads.mangadex.org/covers/${mangaid}/${cover_art.replace(FileSystem.documentDirectory,"")}` :`https://uploads.mangadex.org/covers/${mangaid}/${volumefeed[0].attributes.fileName}`  }}></Image>
                     <Text style={{color:"white",fontSize:20}}>{title}</Text>
                 </View>
                 }
